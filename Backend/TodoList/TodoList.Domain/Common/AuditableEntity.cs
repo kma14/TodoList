@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TodoList.Domain.Common
 {
-    internal class AuditableEntity
+    public class AuditableEntity
     {
-        public DateOnly WhenCreated { get; set; }
+        public Guid Id { get; set; }
+        public DateTime WhenCreated { get; set; }
     }
 }

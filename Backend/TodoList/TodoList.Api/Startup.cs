@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TodoList.Application;
+using TodoList.Persistence;
 
 namespace TodoList.Api
 {
@@ -20,6 +22,9 @@ namespace TodoList.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddPersistenceService();
+            services.AddApplicationServices();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllHeaders",
@@ -36,8 +41,6 @@ namespace TodoList.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoList.Api", Version = "v1" });
             });
-
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoItemsDB"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

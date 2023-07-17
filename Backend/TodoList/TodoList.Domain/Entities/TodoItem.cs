@@ -7,19 +7,17 @@ using TodoList.Domain.Common;
 
 namespace TodoList.Domain.Entities
 {
-    public class ListItem : AuditableEntity
+    public class TodoItem : AuditableEntity
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public bool IsCompleted { get; set; }
 
-        public ListItem(string name, string description)
+        public TodoItem(string description)
         {
             Id = Guid.NewGuid();
-            Name = name;
             Description = description;
             IsCompleted = false;
+            WhenCreated = DateTime.Now;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace TodoList.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IListItem, ListItemRepository>();
+            services.AddScoped<ITodoItem, TodoItemRepository>();
             return services;
         }
     }
