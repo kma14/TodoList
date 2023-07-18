@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoList.Api.DTOs.CommandDTOs.TodoItem;
+using TodoList.Application;
 using TodoList.Application.Contracts.API;
 using TodoList.Domain.Entities;
 
@@ -30,7 +31,7 @@ namespace TodoList.Api.Controllers
         /// </summary>
         /// <returns>List of TodoItems</returns>
         [HttpGet("TodoItems")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemss()
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
             return await _toDoItemRepo.ListAllAsync();
         }
@@ -53,7 +54,7 @@ namespace TodoList.Api.Controllers
         /// <param name="id">TodoItem Id</param>
         /// <param name="updatedTodoItem">TodoItem dto</param>
         [HttpPut("TodoItems/{id}")]
-        public async Task<ActionResult> CreateTodoItemInGroup(Guid id, UpdateTodoItemDto updatedTodoItem)
+        public async Task<ActionResult> UpdateTodoItem(Guid id, UpdateTodoItemDto updatedTodoItem)
         {
             var existingTodoItem = await _toDoItemRepo.GetByIdAsync(id);
             if (existingTodoItem == null)
@@ -79,9 +80,19 @@ namespace TodoList.Api.Controllers
         public async Task<ActionResult<TodoItem>> CreateTodoItem(CreateTodoItemDto todoItemDto)
         {
             TodoItem newTodoItem = new TodoItem(todoItemDto.Description);
-            await _toDoItemRepo.AddAsync(newTodoItem);
-
-            return CreatedAtRoute("GetTodoItemById", new { Id = newTodoItem.Id }, newTodoItem);
+            try
+            {
+                await _toDoItemRepo.AddAsync(newTodoItem);
+                return CreatedAtRoute("GetTodoItemById", new { Id = newTodoItem.Id }, newTodoItem);
+            }
+            catch (ItemAlreadyExistException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex) { }
+            {
+                return StatusCode(500, "An error occurred");
+            }
         }
 
 

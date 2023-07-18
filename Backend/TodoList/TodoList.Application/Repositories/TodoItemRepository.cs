@@ -18,6 +18,11 @@ namespace TodoList.Application.Repositories
         }
         public Task<TodoItem> AddAsync(TodoItem entity)
         {
+            bool alreadyExists = _todoItemPersistRepo.TodoItemDescriptionExists(entity.Description);
+            if (alreadyExists)
+            {
+                throw new ItemAlreadyExistException("An active item with the same description already exist");
+            }
             return _todoItemPersistRepo.AddAsync(entity);
         }
 
@@ -31,9 +36,10 @@ namespace TodoList.Application.Repositories
             return _todoItemPersistRepo.GetByIdAsync(id);
         }
 
-        public Task<List<TodoItem>> ListAllAsync()
+        public async Task<List<TodoItem>> ListAllAsync()
         {
-            return _todoItemPersistRepo.ListAllAsync();
+            var items = await _todoItemPersistRepo.ListAllAsync();
+            return items.OrderBy(item => item.IsCompleted).ToList(); ;
         }
 
         public bool TodoItemDescriptionExists(string description)

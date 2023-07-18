@@ -21,8 +21,8 @@ const TodoItemList = ({items, getItems}) => {
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
-              <TodoItem item={item}/>
+            {items.map(item => (
+              <TodoItem key={item.id} item={item}/>
             ))}
           </tbody>
         </Table>
@@ -30,4 +30,4 @@ const TodoItemList = ({items, getItems}) => {
     )
   }
 
-  export  {TodoItemList};
+  export  default TodoItemList;

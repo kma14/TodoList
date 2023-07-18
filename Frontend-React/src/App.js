@@ -1,46 +1,30 @@
 import './App.css'
 import React, { useState, useEffect } from 'react'
+import axios  from 'axios'
 
-import {TodoItemList} from './Components/TodoItemList'
+import TodoItemList from './Components/TodoItemList'
 import Requirement from './Components/Requirement'
 import AddItemForm from './Components/AddItemForm'
 
-const axios = require('axios')
-
 const App = () => {
-  const [description, setDescription] = useState('')
   const [items, setItems] = useState([])
 
   useEffect(() => {
-    // todo
+    getItems();
   }, [])
 
   async function getItems() {
     try {
-      alert('todo')
+      const resp = await axios.get(process.env.REACT_APP_API_URL);
+      setItems(resp.data);
     } catch (error) {
       console.error(error)
     }
   }
 
-  async function handleAdd() {
-    try {
-      alert('todo')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  function handleClear() {
-    setDescription('')
-  }
-
-  async function handleMarkAsComplete(item) {
-    try {
-      alert('todo')
-    } catch (error) {
-      console.error(error)
-    }
+  async function handleAdd(todoItem) {
+    await setItems(prevState => [...prevState,todoItem])
+    console.log('App',items)
   }
 
   return (
@@ -49,7 +33,7 @@ const App = () => {
           <Requirement/>
         </div>
         <div>
-          <AddItemForm handleAdd={handleAdd} handleClear={handleClear} description={description} setDescription={setDescription} />
+          <AddItemForm handleAdd={handleAdd} />
         </div>
         <div>
           <TodoItemList items={items} getItems={getItems} />
