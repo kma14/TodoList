@@ -2,4 +2,5 @@
 2: Uses a static class to work as mocked DB for simplicity, but code is structured for flexibility and scalability, it can easily swap to other data source, like a real database <br/><br/>
 3: Unit tests are provided for both API and front end, but only basic ones for demo purpose<br/><br/>
 4: Basic validations added using built in annotation, for the same reason<br/><br/>
-5: include .env file in react, please change the API URL when test on you own computer
+5: Included .env file in react, please change the API URL when test on you own computer<br/><br/>
+6: Included a postman collection which can be used to test the API in Frontend_React folder
