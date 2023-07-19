@@ -9,7 +9,7 @@ using TodoList.Domain.Entities;
 
 namespace TodoList.Application.Repositories
 {
-    internal class TodoItemRepository : ITodoItem
+    public class TodoItemRepository : ITodoItem
     {
         private readonly ITodoItemPersist _todoItemPersistRepo;
         public TodoItemRepository(ITodoItemPersist todoItemPersistRepo)
