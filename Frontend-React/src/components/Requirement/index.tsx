@@ -1,6 +1,7 @@
-import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
+import { Alert} from 'react-bootstrap'
+import React from 'react'
 
-const Requirement = () => {
+const Requirement:React.FC = () => {
     return (
         <>
             <Alert variant="success">

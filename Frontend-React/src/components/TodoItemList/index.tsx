@@ -1,8 +1,14 @@
-
+import React from 'react'
 import { Button,Table} from 'react-bootstrap'
 import TodoItem from '../TodoItem'
+import { TodoItemType } from '../../models';
 
-const TodoItemList = ({items, getItems}) => {
+interface TodoItemListProps{
+  items: TodoItemType[],
+  getItems: () => Promise<void>; 
+}
+
+const TodoItemList:React.FC<TodoItemListProps> = ({items, getItems}) => {
     return (
       <>
         <h1>

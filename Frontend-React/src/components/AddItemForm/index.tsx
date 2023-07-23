@@ -1,13 +1,15 @@
+import React, { useState, FormEvent } from 'react'
+import axios, {AxiosError} from 'axios'
+import { TodoItemType } from '../../models';
 
-import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
-import { useState } from 'react'
-import axios from 'axios'
-
-const AddItemForm = ({ handleAdd }) => {
+interface AddItemFormProps {
+    handleAdd: (item: TodoItemType) => Promise<void>
+}
+const AddItemForm: React.FC<AddItemFormProps> = ({ handleAdd }) => {
     const [description, setDescription] = useState('')
     const [descriptionError, setDescriptionError] = useState('');
 
-    const handleFormSubmit = async (event) => {
+    const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
         setDescriptionError('');
@@ -21,17 +23,25 @@ const AddItemForm = ({ handleAdd }) => {
         };
 
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL, dataToSend);
-            setDescription('');
-            handleAdd(response.data)
-        } catch (error) {
-            setDescriptionError(error.response.data);
-            console.log('Error status:', error.response.status);
-            console.log('Error data:', error.response.data);
+            if (process.env.REACT_APP_API_URL) {
+                const response = await axios.post(process.env.REACT_APP_API_URL, dataToSend);
+                setDescription('');
+                handleAdd(response.data)
+            } else {
+                console.error('can not find API url')
+            }
+        } catch (error:any ) {
+            if (error instanceof AxiosError && error.response) {
+                setDescriptionError(error.response.data);
+                console.log('Error status:', error.response.status);
+                console.log('Error data:', error.response.data);
+            }else {
+                console.error('An error occurred:', error.message);
+            }
         }
     }
 
-    const handelClear = ()=>{
+    const handelClear = () => {
         setDescription('');
         setDescriptionError('');
     }
@@ -52,13 +62,13 @@ const AddItemForm = ({ handleAdd }) => {
                         onChange={(event) => setDescription(event.target.value)}
                         style={{ width: '100%', marginBottom: '1em' }} />
                     {descriptionError &&
-                        <div className="alert alert-danger" role="alert"  data-testid="errorMessage">
+                        <div className="alert alert-danger" role="alert" data-testid="errorMessage">
                             {descriptionError}
                         </div>}
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        style={{marginRight:'10px'}}>
+                        style={{ marginRight: '10px' }}>
                         Add Item
                     </button>
                     <button

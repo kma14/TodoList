@@ -5,9 +5,10 @@ import axios  from 'axios'
 import TodoItemList from './Components/TodoItemList'
 import Requirement from './Components/Requirement'
 import AddItemForm from './Components/AddItemForm'
+import { TodoItemType }  from './models'
 
-const App = () => {
-  const [items, setItems] = useState([])
+const App:React.FC = () => {
+  const [items, setItems] = useState<TodoItemType[]>([])
 
   useEffect(() => {
     getItems();
@@ -15,14 +16,16 @@ const App = () => {
 
   async function getItems() {
     try {
-      const resp = await axios.get(process.env.REACT_APP_API_URL);
-      setItems(resp.data);
+      if(process.env.REACT_APP_API_URL){
+        const resp = await axios.get(process.env.REACT_APP_API_URL);
+        setItems(resp.data);
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
-  async function handleAdd(todoItem) {
+  async function handleAdd(todoItem:TodoItemType) {
     await setItems(prevState => [...prevState,todoItem])
     console.log('App',items)
   }

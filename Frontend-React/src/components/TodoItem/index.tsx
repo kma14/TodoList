@@ -1,14 +1,18 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
+import { TodoItemType } from '../../models';
 
-const TodoItem = ({ item: propItem }) => {
+interface TodoItemProps {
+    item: TodoItemType;
+}
+const TodoItem: React.FC<TodoItemProps> = ({ item: propItem }) => {
     const [item, setItem] = useState(propItem);
 
     useEffect(() => {
         setItem(propItem);
     }, [propItem]);
 
-    const updateItem = async (event) => {
+    const updateItem = async (event: FormEvent) => {
         event.preventDefault();
         const payload = { description: item.description, IsCompleted: true }
         try {
@@ -21,7 +25,7 @@ const TodoItem = ({ item: propItem }) => {
     }
     return (
         <>
-            <tr style={item.isCompleted ? { textDecoration: 'line-through' } : {fontWeight:'bold'}}>
+            <tr style={item.isCompleted ? { textDecoration: 'line-through' } : { fontWeight: 'bold' }}>
                 <td>{item.id}</td>
                 <td>{item.description}</td>
                 <td>
