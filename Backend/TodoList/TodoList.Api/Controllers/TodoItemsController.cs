@@ -14,6 +14,7 @@ namespace TodoList.Api.Controllers
 {
     [ApiController]
     [Route("api")]
+    //[ResponseCache(Duration =10, Location = ResponseCacheLocation.Any)]
     public class TodoItemsController : ControllerBase
     {
         private readonly ITodoItem _toDoItemRepo;
@@ -33,6 +34,7 @@ namespace TodoList.Api.Controllers
         [HttpGet("TodoItems")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
+            _logger.LogInformation("Get todoitems");
             return await _toDoItemRepo.ListAllAsync();
         }
 

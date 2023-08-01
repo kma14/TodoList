@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using TodoList.Api.Middleware;
 using TodoList.Application;
 using TodoList.Persistence;
 
@@ -35,11 +37,15 @@ namespace TodoList.Api
                                  .AllowAnyMethod();
                       });
             });
-
+            services.AddResponseCaching();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoList.Api", Version = "v1" });
+            });
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole();
             });
         }
 
@@ -53,6 +59,8 @@ namespace TodoList.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoList.Api v1"));
             }
 
+            //app.UseTimingMiddleware();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -60,6 +68,8 @@ namespace TodoList.Api
             app.UseCors("AllowAllHeaders");
 
             app.UseAuthorization();
+
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
